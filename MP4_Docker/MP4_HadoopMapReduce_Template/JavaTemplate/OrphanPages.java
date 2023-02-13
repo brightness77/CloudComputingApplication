@@ -71,7 +71,7 @@ public class OrphanPages extends Configured implements Tool {
             // write self
             IntWritable zero = new IntWritable(0);
             IntWritable source = new IntWritable(curWeb);
-            context.write(curWeb, zero);
+            context.write(source, zero);
 
             //context.write(<IntWritable>, <IntWritable>); // pass this output to reducer
         }
