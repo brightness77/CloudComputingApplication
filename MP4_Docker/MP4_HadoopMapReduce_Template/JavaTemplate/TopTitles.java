@@ -227,8 +227,8 @@ public class TopTitles extends Configured implements Tool {
             }
 
             for(Pair<Integer, String> pair : countToWordMap){
-                Text word = new Text(item.second);
-                IntWritable intVal = new IntWritable(item.first);
+                Text word = new Text(pair.second);
+                IntWritable intVal = new IntWritable(pair.first);
                 context.write(word, intVal);
             }
 
