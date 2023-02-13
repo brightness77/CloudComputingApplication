@@ -126,8 +126,20 @@ public class TopTitles extends Configured implements Tool {
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             //TODO
             String line = value.toString();
-
             StringTokenizer tokenizer = new StringTokenizer(line, delimiters);
+
+            Text word = new Text();
+            final IntWritable one = new IntWritable(1);
+
+            while(tokenizer.hasMoreTokens()){
+                String nextToken = tokenizer.nextToken();
+                nextToken = nextToken.trim().toLowerCase();
+                if(!stopWords.contains(nextToken)){
+                    //only add uncommon words
+                    word.set(nextToken);
+                    context.write(word, one);
+                }
+            }
 
             //context.write(<Text>, <IntWritable>); // pass this output to reducer
         }
@@ -137,12 +149,24 @@ public class TopTitles extends Configured implements Tool {
         @Override
         public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
             //TODO
+
+            IntWritable result = new IntWritable();
+
+            int sum = 0;
+            for(IntWritable val: values){
+                sum += val.get();
+            }
+
+            result.set(sum);
+            context.write(key, result);
+
             //context.write(<Text>, <IntWritable>); // pass this output to TopTitlesMap mapper
         }
     }
 
     public static class TopTitlesMap extends Mapper<Text, Text, NullWritable, TextArrayWritable> {
         //TODO
+        private TreeSet<Pair<Integer, String>> countToWordMap = new TreeSet<>();
 
         @Override
         protected void setup(Context context) throws IOException,InterruptedException {
@@ -152,11 +176,26 @@ public class TopTitles extends Configured implements Tool {
         @Override
         public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
             //TODO
+            Integer count = Integer.parseInt(value.toString());
+            String word = key.toString();
+
+            countToWordMap.add(new Pair<Integer, String>(count, word));
+
+            if(countToWordMap.size() > 10){
+                countToWordMap.remove(countToWordMap.first());
+            }
         }
 
         @Override
         protected void cleanup(Context context) throws IOException, InterruptedException {
             //TODO
+
+            for (Pair<Integer, String> item: countToWordMap) {
+                String[] strings = {item.second, item.first.toString()};
+                TextArrayWritable val = new TextArrayWritable(strings);
+                context.write(NullWritable.get(), val);
+            }
+
             //Cleanup operation starts after all mappers are finished
             //context.write(<NullWritable>, <TextArrayWritable>); // pass this output to reducer
         }
@@ -164,6 +203,7 @@ public class TopTitles extends Configured implements Tool {
 
     public static class TopTitlesReduce extends Reducer<NullWritable, TextArrayWritable, Text, IntWritable> {
         // TODO
+        private TreeSet<Pair<Integer, String>> countToWordMap = new TreeSet<>();
 
         @Override
         protected void setup(Context context) throws IOException,InterruptedException {
@@ -173,6 +213,25 @@ public class TopTitles extends Configured implements Tool {
         @Override
         public void reduce(NullWritable key, Iterable<TextArrayWritable> values, Context context) throws IOException, InterruptedException {
             //TODO
+
+            for(TextArrayWritable textPair: values){
+                Text[] pair = (Text[]) textPair.toArray();
+                String word = pair[0].toString();
+                Integer count = Integer.parseInt(pair[1].toString());
+
+                countToWordMap.add(new Pair<Integer, String>(count, word));
+
+                if(countToWordMap.size() > 10){
+                    countToWordMap.remove(countToWordMap.first());
+                }
+            }
+
+            for(Pair<Integer, String> pair : countToWordMap){
+                Text word = new Text(item.second);
+                IntWritable intVal = new IntWritable(item.first);
+                context.write(word, intVal);
+            }
+
             //context.write(<Text>, <IntWritable>); // print as final output
         }
     }
