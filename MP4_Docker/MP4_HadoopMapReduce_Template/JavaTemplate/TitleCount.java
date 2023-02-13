@@ -91,7 +91,8 @@ public class TitleCount extends Configured implements Tool {
             String line = value.toString();
             StringTokenizer tokenizer = new StringTokenizer(line, delimiters);
 
-            private Text word = new Text();
+            Text word = new Text();
+            final IntWritable one = new IntWritable(1);
 
             while(tokenizer.hasMoreTokens()){
                 String nextToken = tokenizer.nextToken();
@@ -112,7 +113,7 @@ public class TitleCount extends Configured implements Tool {
         public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
             //TODO
 
-            private IntWritable result = new IntWritable();
+            IntWritable result = new IntWritable();
 
             int sum = 0;
             for(IntWritable val: values){
