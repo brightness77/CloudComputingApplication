@@ -38,7 +38,7 @@ public class TopPopularLinks extends Configured implements Tool {
         Path tmpPath = new Path("./tmp");
         fs.delete(tmpPath, true);
 
-        Job jobA = Job.getInstance(conf, "Top Popular Links");
+        Job jobA = Job.getInstance(conf, "Link Counts");
         jobA.setOutputKeyClass(IntWritable.class);
         jobA.setOutputValueClass(IntWritable.class);
 
@@ -210,7 +210,7 @@ public class TopPopularLinks extends Configured implements Tool {
                 }
             }
 
-            for(Pair<Integer, String> pair : countToLinkMap){
+            for(Pair<Integer, Integer> pair : countToLinkMap){
                 IntWritable webId = new IntWritable(pair.second);
                 IntWritable intVal = new IntWritable(pair.first);
                 context.write(webId, intVal);
