@@ -199,9 +199,9 @@ public class TopPopularLinks extends Configured implements Tool {
             //TODO
 
             for(IntArrayWritable intPair: values){
-                Integer[] pair = (Integer[]) intPair.toArray();
-                Integer webId = pair[0];
-                Integer curCount = pair[1];
+                IntWritable[] pair = (IntWritable[]) intPair.toArray();
+                Integer webId = pair[0].get();
+                Integer curCount = pair[1].get();
 
                 countToLinkMap.add(new Pair<Integer, Integer>(curCount, webId));
 
@@ -211,12 +211,11 @@ public class TopPopularLinks extends Configured implements Tool {
             }
 
             for(Pair<Integer, Integer> pair : countToLinkMap){
-                IntWritable webId = new IntWritable(pair.second);
-                IntWritable intVal = new IntWritable(pair.first);
-                context.write(webId, intVal);
+                IntWritable webIdWritable = new IntWritable(pair.second);
+                IntWritable intValWritable = new IntWritable(pair.first);
+                context.write(webIdWritable, intValWritable);
             }
 
-            //context.write(<Text>, <IntWritable>); // print as final output
         }
 
     }
