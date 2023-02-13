@@ -48,6 +48,31 @@ public class OrphanPages extends Configured implements Tool {
         @Override
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             //TODO
+
+            String line = value.toString();
+            int indexOfLinks = line.indexOf(":");
+
+            Integer curWeb = Integer.parseInt(line.substring(0, indexOfLinks));
+            String[] curLinks = line.substring(indexOfLinks + 2).split(" ");
+
+            // emit intermediate values
+            IntWritable one = new IntWritable(1);
+            IntWritable link = new IntWritable(0);
+            for(String curLink: curLinks){
+                Integer curParsedLink = Integer.parseInt(curLink);
+                if(curLink.equals(curParsedLink)){
+                    //exclude self linking condition
+                    continue;
+                }
+                link.set(curParsedLink);
+                context.write(link, one);
+            }
+
+            // write self
+            IntWritable zero = new IntWritable(0);
+            IntWritable source = new IntWritable(curWeb);
+            context.write(curWeb, zero);
+
             //context.write(<IntWritable>, <IntWritable>); // pass this output to reducer
         }
     }
@@ -56,6 +81,16 @@ public class OrphanPages extends Configured implements Tool {
         @Override
         public void reduce(IntWritable key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
             //TODO
+
+            int totalLinkCount = 0;
+            for(IntWritable count: values){
+                totalLinkCount += count.get();
+            }
+
+            if(totalLinkCount == 0){
+                context.write(key, NullWritable.get());
+            }
+
             //context.write(<IntWritable>, <NullWritable>); // print as final output
         }
     }
