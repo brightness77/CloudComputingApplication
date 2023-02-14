@@ -60,7 +60,7 @@ public class OrphanPages extends Configured implements Tool {
             IntWritable link = new IntWritable(0);
             for(String curLink: curLinks){
                 Integer curParsedLink = Integer.parseInt(curLink);
-                if(curLink.equals(curParsedLink)){
+                if(curWeb.equals(curParsedLink)){
                     //exclude self linking condition
                     continue;
                 }
