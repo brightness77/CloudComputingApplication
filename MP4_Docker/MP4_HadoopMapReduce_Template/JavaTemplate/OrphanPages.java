@@ -82,12 +82,12 @@ public class OrphanPages extends Configured implements Tool {
         public void reduce(IntWritable key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
             //TODO
 
-            int totalLinkCount = 0;
+            Integer totalLinkCount = 0;
             for(IntWritable count: values){
                 totalLinkCount += count.get();
             }
 
-            if(totalLinkCount == 0){
+            if(totalLinkCount.equals(0)){
                 context.write(key, NullWritable.get());
             }
 
