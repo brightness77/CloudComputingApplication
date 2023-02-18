@@ -127,10 +127,10 @@ public class PopularityLeague extends Configured implements Tool {
             IntWritable link = new IntWritable(0);
             for(String curLink: curLinks) {
                 Integer curParsedLink = Integer.parseInt(curLink);
-                if (curLink.equals(curParsedLink)) {
-                    //exclude self linking condition
-                    continue;
-                }
+//                if (curWeb.equals(curParsedLink)) {
+//                    //exclude self linking condition
+//                    continue;
+//                }
                 link.set(curParsedLink);
                 context.write(link, one);
             }
