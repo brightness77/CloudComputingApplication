@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  generateName: mp12-job-free-
+  # region: us-east-1
+
+spec:
+  template:
+    spec:
+      containers:
+      - name: mp12-free-container
+        image: yixiao6/mp12_image:0.0.1
+        env:
+          - name: DATASET
+            value: "mnist"
+          - name: TYPE
+            value: "ff"
+        resources:
+          limits:
+            cpu: "0.9"
+          requests:
+            cpu: "0.9"
+      restartPolicy: Never
+  backoffLimit: 4
+  completions: 2

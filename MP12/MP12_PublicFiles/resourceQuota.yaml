@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ResourceQuota
+
+metadata:
+  name: provisioning
+  # region: us-east-1
+
+# availabilityZones:
+#    - us-east-1a
+#    - us-east-1b
+
+spec:
+  hard:
+    requests.cpu: "2"
+    limits.cpu: "2"

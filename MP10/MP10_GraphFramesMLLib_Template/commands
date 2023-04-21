@@ -1,0 +1,8 @@
+git clone https://github.com/UIUC-CS498-Cloud/MP10_GraphFramesMLLib_Template.git
+cd MP10_GraphFramesMLLib_Template
+docker build -t mp10_docker .
+docker run -v $(pwd):/mp10 -it mp10_docker /bin/bash
+# Use the following instead to run docker image for Windows
+# docker run -it -v //c/path-to-Docker_MP10:/mp10 mp10_docker
+
+docker run -it mp10_docker /bin/bash

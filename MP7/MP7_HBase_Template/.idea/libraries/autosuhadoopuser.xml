@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="autosuhadoopuser">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Docker/autosuhadoopuser.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+git clone https://github.com/UIUC-CS498-Cloud/MP11_Storm_Template.git
+cd MP11_Storm_Template/Docker/
+docker build -t mp11_docker .
+cd ../ # go to under MP11_Storm_Template/
+
+docker run -v $(pwd):/mp11/solution -it mp11_docker
+docker run -v E:\UIUC\CS498_CCA\MP\MP11\MP11_Storm_Template:/mp11/solution -it mp11_docker
+
+redis-cli -a uiuc_cs498_mp11 HGET partAWordCount apple

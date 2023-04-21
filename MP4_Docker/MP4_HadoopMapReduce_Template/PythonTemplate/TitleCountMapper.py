@@ -23,7 +23,11 @@ with open(delimitersPath) as f:
     # TODO
 
 for line in sys.stdin:
+<<<<<<< HEAD
+
+=======
   
+>>>>>>> 418bddc118fe2b4e3c1fbc0deea877737dfcc1ad
     # TODO
 
     # print('%s\t%s' % (  ,  )) pass this output to reducer

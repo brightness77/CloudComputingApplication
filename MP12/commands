@@ -1,0 +1,25 @@
+docker build -t mp12_image .
+
+docker run --rm --name mp12_container mp12_image
+docker run --rm --name mp12_container -e "DATASET=mnist" -e "TYPE=ff" mp12_image
+
+docker tag mp12_image yixiao6/mp12_image:0.0.1
+docker push yixiao6/mp12_image:0.0.1
+
+
+# cluster
+eksctl create cluster -f createCluster.yaml
+
+# jobs
+kubectl apply -f createJobFree.yaml
+kubectl apply -f createJobPremium.yaml
+
+# create namespace
+kubectl create namespace free-service
+
+# resource quota
+kubectl apply -f resourceQuota.yaml --namespace=free-service
+
+
+
+
